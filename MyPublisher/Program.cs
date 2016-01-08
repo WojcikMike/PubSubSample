@@ -21,7 +21,7 @@ static class Program
         busConfiguration.AuditProcessedMessagesTo("audit");
         busConfiguration.SendFailedMessagesTo("error");
         busConfiguration.EnableInstallers();
-        busConfiguration.UseTransport<MsmqTransport>().Transactions(TransportTransactionMode.None);
+        //busConfiguration.UseTransport<MsmqTransport>().Transactions(TransportTransactionMode.None);
 
         IEndpointInstance endpoint = await Endpoint.Start(busConfiguration);
         try

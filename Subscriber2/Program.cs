@@ -23,7 +23,7 @@ static class Program
         busConfiguration.UsePersistence<InMemoryPersistence>();
         busConfiguration.SendFailedMessagesTo("error");
         busConfiguration.EnableInstallers();
-        busConfiguration.UseTransport<MsmqTransport>().Transactions(TransportTransactionMode.None);
+        //busConfiguration.UseTransport<MsmqTransport>().Transactions(TransportTransactionMode.None);
 
         IEndpointInstance endpoint = await Endpoint.Start(busConfiguration);
         try

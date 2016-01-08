@@ -24,8 +24,8 @@ public class EventMessageHandler : IHandleMessages<IMyEvent>
             Duration = TimeSpan.FromSeconds(99999D)
         });
 
-        throw new Exception("jada jada jada");
-        //return Task.FromResult(0);
+        //throw new Exception("jada jada jada");
+        return Task.FromResult(0);
     }
 
 }
