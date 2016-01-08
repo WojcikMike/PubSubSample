@@ -21,15 +21,15 @@ static class Program
         busConfiguration.AuditProcessedMessagesTo("audit");
         busConfiguration.SendFailedMessagesTo("error");
         busConfiguration.EnableInstallers();
-        //busConfiguration.UseTransport<MsmqTransport>().Transactions(TransportTransactionMode.None);
+        busConfiguration.UseTransport<MsmqTransport>().Transactions(TransportTransactionMode.None);
 
         IEndpointInstance endpoint = await Endpoint.Start(busConfiguration);
         try
         {
-            IBusContext busContext = endpoint.CreateBusContext();
-            await busContext.Subscribe<MySuperPowerAreEnabled>();
-            Start(busContext);
-            await busContext.Unsubscribe<MySuperPowerAreEnabled>();
+            IBusSession busSession = endpoint.CreateBusSession();
+            await busSession.Subscribe<MySuperPowerAreEnabled>();
+            Start(busSession);
+            await busSession.Unsubscribe<MySuperPowerAreEnabled>();
         }
         finally
         {
@@ -37,7 +37,7 @@ static class Program
         }
     }
 
-    static void Start(IBusContext busContext)
+    static void Start(IBusSession busContext)
     {
         Console.WriteLine("Press '1' to publish IEvent");
         Console.WriteLine("Press '2' to publish EventMessage");
