@@ -14,22 +14,21 @@ static class Program
     static async Task AsyncMain()
     {
         LogManager.Use<DefaultFactory>().Level(LogLevel.Info);
-        BusConfiguration busConfiguration = new BusConfiguration();
-        busConfiguration.EndpointName("Samples.PubSub.MyPublisher");
-        busConfiguration.UseSerialization<JsonSerializer>();
-        busConfiguration.UsePersistence<InMemoryPersistence>();
-        busConfiguration.AuditProcessedMessagesTo("audit");
-        busConfiguration.SendFailedMessagesTo("error");
-        busConfiguration.EnableInstallers();
+        EndpointConfiguration endpointConfiguration = new EndpointConfiguration();
+        endpointConfiguration.EndpointName("Samples.PubSub.MyPublisher");
+        endpointConfiguration.UseSerialization<JsonSerializer>();
+        endpointConfiguration.UsePersistence<InMemoryPersistence>();
+        endpointConfiguration.AuditProcessedMessagesTo("audit");
+        endpointConfiguration.SendFailedMessagesTo("error");
+        endpointConfiguration.EnableInstallers();
         //busConfiguration.UseTransport<MsmqTransport>().Transactions(TransportTransactionMode.None);
 
-        IEndpointInstance endpoint = await Endpoint.Start(busConfiguration);
+        IEndpointInstance endpoint = await Endpoint.Start(endpointConfiguration);
         try
         {
-            IBusSession busSession = endpoint.CreateBusSession();
-            await busSession.Subscribe<MySuperPowerAreEnabled>();
-            Start(busSession);
-            await busSession.Unsubscribe<MySuperPowerAreEnabled>();
+            await endpoint.Subscribe<MySuperPowerAreEnabled>();
+            Start(endpoint);
+            await endpoint.Unsubscribe<MySuperPowerAreEnabled>();
         }
         finally
         {
@@ -37,7 +36,7 @@ static class Program
         }
     }
 
-    static void Start(IBusSession busContext)
+    static void Start(IEndpointInstance busContext)
     {
         Console.WriteLine("Press '1' to publish IEvent");
         Console.WriteLine("Press '2' to publish EventMessage");

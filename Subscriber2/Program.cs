@@ -14,25 +14,24 @@ static class Program
     static async Task AsyncMain()
     {
         LogManager.Use<DefaultFactory>().Level(LogLevel.Info);
-        BusConfiguration busConfiguration = new BusConfiguration();
-        busConfiguration.EndpointName("Samples.PubSub.Subscriber2");
-        busConfiguration.UseSerialization<JsonSerializer>();
-        busConfiguration.AuditProcessedMessagesTo("audit");
-        busConfiguration.DisableFeature<AutoSubscribe>();
-        busConfiguration.DisableFeature<SecondLevelRetries>();
-        busConfiguration.UsePersistence<InMemoryPersistence>();
-        busConfiguration.SendFailedMessagesTo("error");
-        busConfiguration.EnableInstallers();
+        EndpointConfiguration endpointConfiguration = new EndpointConfiguration();
+        endpointConfiguration.EndpointName("Samples.PubSub.Subscriber2");
+        endpointConfiguration.UseSerialization<JsonSerializer>();
+        endpointConfiguration.AuditProcessedMessagesTo("audit");
+        endpointConfiguration.DisableFeature<AutoSubscribe>();
+        endpointConfiguration.DisableFeature<SecondLevelRetries>();
+        endpointConfiguration.UsePersistence<InMemoryPersistence>();
+        endpointConfiguration.SendFailedMessagesTo("error");
+        endpointConfiguration.EnableInstallers();
         //busConfiguration.UseTransport<MsmqTransport>().Transactions(TransportTransactionMode.None);
 
-        IEndpointInstance endpoint = await Endpoint.Start(busConfiguration);
+        IEndpointInstance endpoint = await Endpoint.Start(endpointConfiguration);
         try
         {
-            IBusSession busContext = endpoint.CreateBusSession();
-            await busContext.Subscribe<IMyEvent>();
+            await endpoint.Subscribe<IMyEvent>();
             Console.WriteLine("Press any key to exit");
             Console.ReadKey();
-            await busContext.Unsubscribe<IMyEvent>();
+            await endpoint.Unsubscribe<IMyEvent>();
         }
         finally
         {
