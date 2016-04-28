@@ -1,7 +1,9 @@
 using System;
 using System.Threading.Tasks;
 using NServiceBus;
+using NServiceBus.Features;
 using NServiceBus.Logging;
+using AzureStorageQueueTransport = NServiceBus.AzureStorageQueueTransport;
 
 static class Program
 {
@@ -13,14 +15,18 @@ static class Program
     static async Task AsyncMain()
     {
         LogManager.Use<DefaultFactory>().Level(LogLevel.Info);
-        EndpointConfiguration endpointConfiguration = new EndpointConfiguration();
-        endpointConfiguration.EndpointName("Samples.PubSub.Subscriber1");
+        EndpointConfiguration endpointConfiguration = new EndpointConfiguration("Samples.PubSub.Subscriber1");
+        endpointConfiguration.PurgeOnStartup(true);
         endpointConfiguration.AuditProcessedMessagesTo("audit");
         endpointConfiguration.UseSerialization<JsonSerializer>();
+        endpointConfiguration.DisableFeature<SecondLevelRetries>();
         endpointConfiguration.UsePersistence<InMemoryPersistence>();
         endpointConfiguration.SendFailedMessagesTo("error");
         endpointConfiguration.EnableInstallers();
-        //busConfiguration.UseTransport<MsmqTransport>().Transactions(TransportTransactionMode.None);
+        endpointConfiguration.UseTransport<AzureStorageQueueTransport>()
+            .ConnectionString("connstring")
+            .Addressing().Partitioning().UseAccountNamesInsteadOfConnectionStrings();
+            //.AddStorageAccount("asd", "connstring");
 
         IEndpointInstance endpoint = await Endpoint.Start(endpointConfiguration);
         try

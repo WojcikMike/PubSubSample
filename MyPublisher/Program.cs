@@ -14,14 +14,17 @@ static class Program
     static async Task AsyncMain()
     {
         LogManager.Use<DefaultFactory>().Level(LogLevel.Info);
-        EndpointConfiguration endpointConfiguration = new EndpointConfiguration();
-        endpointConfiguration.EndpointName("Samples.PubSub.MyPublisher");
+        EndpointConfiguration endpointConfiguration = new EndpointConfiguration("Samples.PubSub.MyPublisher");
+        endpointConfiguration.PurgeOnStartup(true);
         endpointConfiguration.UseSerialization<JsonSerializer>();
         endpointConfiguration.UsePersistence<InMemoryPersistence>();
         endpointConfiguration.AuditProcessedMessagesTo("audit");
         endpointConfiguration.SendFailedMessagesTo("error");
         endpointConfiguration.EnableInstallers();
-        //busConfiguration.UseTransport<MsmqTransport>().Transactions(TransportTransactionMode.None);
+        endpointConfiguration.UseTransport<AzureStorageQueueTransport>()
+            .ConnectionString("connstring")
+            .Addressing().Partitioning().UseAccountNamesInsteadOfConnectionStrings();
+        //.AddStorageAccount("asd", "connstring");
 
         IEndpointInstance endpoint = await Endpoint.Start(endpointConfiguration);
         try

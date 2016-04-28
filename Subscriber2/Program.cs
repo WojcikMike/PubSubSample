@@ -14,8 +14,8 @@ static class Program
     static async Task AsyncMain()
     {
         LogManager.Use<DefaultFactory>().Level(LogLevel.Info);
-        EndpointConfiguration endpointConfiguration = new EndpointConfiguration();
-        endpointConfiguration.EndpointName("Samples.PubSub.Subscriber2");
+        EndpointConfiguration endpointConfiguration = new EndpointConfiguration("Samples.PubSub.Subscriber2");
+        endpointConfiguration.PurgeOnStartup(true);
         endpointConfiguration.UseSerialization<JsonSerializer>();
         endpointConfiguration.AuditProcessedMessagesTo("audit");
         endpointConfiguration.DisableFeature<AutoSubscribe>();
@@ -23,7 +23,11 @@ static class Program
         endpointConfiguration.UsePersistence<InMemoryPersistence>();
         endpointConfiguration.SendFailedMessagesTo("error");
         endpointConfiguration.EnableInstallers();
-        //busConfiguration.UseTransport<MsmqTransport>().Transactions(TransportTransactionMode.None);
+        endpointConfiguration.UseTransport<NServiceBus.AzureStorageQueueTransport>()
+            .ConnectionString("connstring")
+            .Addressing().Partitioning().UseAccountNamesInsteadOfConnectionStrings();
+        //.AddStorageAccount("asd", "connstring");
+
 
         IEndpointInstance endpoint = await Endpoint.Start(endpointConfiguration);
         try
