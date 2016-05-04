@@ -1,6 +1,7 @@
 using System;
+using NServiceBus;
 
-public class MySuperPowerAreEnabled : IMyEvent
+public class MySuperPowerAreEnabled : IEvent
 {
     public Guid EventId { get; set; }
     public DateTime? Time { get; set; }

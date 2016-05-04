@@ -14,16 +14,16 @@ static class Program
     static async Task AsyncMain()
     {
         LogManager.Use<DefaultFactory>().Level(LogLevel.Info);
-        EndpointConfiguration endpointConfiguration = new EndpointConfiguration();
-        endpointConfiguration.EndpointName("Samples.PubSub.Subscriber2");
+        EndpointConfiguration endpointConfiguration = new EndpointConfiguration("Samples.PubSub.Subscriber2");
         endpointConfiguration.UseSerialization<JsonSerializer>();
-        endpointConfiguration.AuditProcessedMessagesTo("audit");
+        //endpointConfiguration.AuditProcessedMessagesTo("audit");
         endpointConfiguration.DisableFeature<AutoSubscribe>();
         endpointConfiguration.DisableFeature<SecondLevelRetries>();
         endpointConfiguration.UsePersistence<InMemoryPersistence>();
         endpointConfiguration.SendFailedMessagesTo("error");
         endpointConfiguration.EnableInstallers();
-        //busConfiguration.UseTransport<MsmqTransport>().Transactions(TransportTransactionMode.None);
+        endpointConfiguration.PurgeOnStartup(true);
+        endpointConfiguration.UseTransport<RabbitMQTransport>().ConnectionString("host=localhost").UnicastRouting();
 
         IEndpointInstance endpoint = await Endpoint.Start(endpointConfiguration);
         try
