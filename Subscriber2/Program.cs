@@ -14,8 +14,7 @@ static class Program
     static async Task AsyncMain()
     {
         LogManager.Use<DefaultFactory>().Level(LogLevel.Info);
-        EndpointConfiguration endpointConfiguration = new EndpointConfiguration();
-        endpointConfiguration.EndpointName("Samples.PubSub.Subscriber2");
+        EndpointConfiguration endpointConfiguration = new EndpointConfiguration("Samples.PubSub.Subscriber2");
         endpointConfiguration.UseSerialization<JsonSerializer>();
         endpointConfiguration.AuditProcessedMessagesTo("audit");
         endpointConfiguration.DisableFeature<AutoSubscribe>();

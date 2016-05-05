@@ -13,8 +13,7 @@ static class Program
     static async Task AsyncMain()
     {
         LogManager.Use<DefaultFactory>().Level(LogLevel.Info);
-        EndpointConfiguration endpointConfiguration = new EndpointConfiguration();
-        endpointConfiguration.EndpointName("Samples.PubSub.Subscriber1");
+        EndpointConfiguration endpointConfiguration = new EndpointConfiguration("Samples.PubSub.Subscriber1");
         endpointConfiguration.AuditProcessedMessagesTo("audit");
         endpointConfiguration.UseSerialization<JsonSerializer>();
         endpointConfiguration.UsePersistence<InMemoryPersistence>();
