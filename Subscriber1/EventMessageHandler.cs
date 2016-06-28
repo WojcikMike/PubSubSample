@@ -9,6 +9,7 @@ public class EventMessageHandler : IHandleMessages<EventMessage>
         Console.WriteLine("Subscriber 1 received EventMessage with Id {0}.", message.EventId);
         Console.WriteLine("Message time: {0}.", message.Time);
         Console.WriteLine("Message duration: {0}.", message.Duration);
-        return Task.FromResult(0);
+        //return Task.FromResult(0);
+        throw new AccessViolationException("bla");
     }
 }

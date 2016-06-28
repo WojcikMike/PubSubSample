@@ -14,13 +14,14 @@ static class Program
     {
         LogManager.Use<DefaultFactory>().Level(LogLevel.Info);
         EndpointConfiguration endpointConfiguration = new EndpointConfiguration("Samples.PubSub.Subscriber1");
-        //endpointConfiguration.AuditProcessedMessagesTo("audit");
+        endpointConfiguration.AuditProcessedMessagesTo("audit");
         endpointConfiguration.UseSerialization<JsonSerializer>();
         endpointConfiguration.UsePersistence<InMemoryPersistence>();
         endpointConfiguration.SendFailedMessagesTo("error");
         endpointConfiguration.EnableInstallers();
         endpointConfiguration.PurgeOnStartup(true);
-        endpointConfiguration.UseTransport<RabbitMQTransport>().ConnectionString("host=localhost").UnicastRouting();
+        
+        endpointConfiguration.UseTransport<RabbitMQTransport>().AddAddressTranslationRule(x => "someWierdAddress").ConnectionString("host=localhost").UnicastRouting();
 
         IEndpointInstance endpoint = await Endpoint.Start(endpointConfiguration);
         try

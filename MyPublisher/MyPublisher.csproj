@@ -53,6 +53,14 @@
       <HintPath>..\packages\RabbitMQ.Client.3.6.1\lib\net45\RabbitMQ.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ServiceControl.Plugin.Nsb6.CustomChecks, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceControl.Plugin.Nsb6.CustomChecks.1.0.0-beta0003\lib\net452\ServiceControl.Plugin.Nsb6.CustomChecks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceControl.Plugin.Nsb6.Heartbeat, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceControl.Plugin.Nsb6.Heartbeat.1.0.0-beta0002\lib\net452\ServiceControl.Plugin.Nsb6.Heartbeat.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
     </Reference>
@@ -60,6 +68,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ACustomCheck.cs" />
+    <Compile Include="APeriodicCheck.cs" />
     <Compile Include="EventMessageHandler.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
