@@ -21,7 +21,7 @@ static class Program
         endpointConfiguration.EnableInstallers();
         endpointConfiguration.PurgeOnStartup(true);
         
-        endpointConfiguration.UseTransport<RabbitMQTransport>().AddAddressTranslationRule(x => "someWierdAddress").ConnectionString("host=localhost").UnicastRouting();
+        endpointConfiguration.UseTransport<RabbitMQTransport>().AddAddressTranslationRule(x => "someWierdAddress").ConnectionString("host=localhost");
 
         IEndpointInstance endpoint = await Endpoint.Start(endpointConfiguration);
         try

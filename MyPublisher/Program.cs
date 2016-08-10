@@ -21,7 +21,7 @@ static class Program
         endpointConfiguration.SendFailedMessagesTo("error");
         endpointConfiguration.EnableInstallers();
         endpointConfiguration.PurgeOnStartup(true);
-        endpointConfiguration.UseTransport<RabbitMQTransport>().ConnectionString("host=localhost").UnicastRouting();
+        endpointConfiguration.UseTransport<RabbitMQTransport>().ConnectionString("host=localhost");
 
         IEndpointInstance endpoint = await Endpoint.Start(endpointConfiguration);
         try

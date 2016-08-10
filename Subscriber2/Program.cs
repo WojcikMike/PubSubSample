@@ -18,13 +18,13 @@ static class Program
         endpointConfiguration.UseSerialization<JsonSerializer>();
         endpointConfiguration.AuditProcessedMessagesTo("audit");
         endpointConfiguration.DisableFeature<AutoSubscribe>();
-        endpointConfiguration.DisableFeature<SecondLevelRetries>();
+        endpointConfiguration.Recoverability().Delayed(x => x.NumberOfRetries(0));
         endpointConfiguration.UsePersistence<InMemoryPersistence>();
         endpointConfiguration.SendFailedMessagesTo("error");
         endpointConfiguration.EnableInstallers();
         endpointConfiguration.PurgeOnStartup(true);
-        endpointConfiguration.UseTransport<RabbitMQTransport>().ConnectionString("host=localhost").UnicastRouting();
-        endpointConfiguration.ScaleOut().InstanceDiscriminator(DateTime.Now.Second.ToString());
+        endpointConfiguration.UseTransport<RabbitMQTransport>().ConnectionString("host=localhost").Routing();
+        
 
         IEndpointInstance endpoint = await Endpoint.Start(endpointConfiguration);
         try
